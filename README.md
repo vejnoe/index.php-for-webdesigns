@@ -1,1 +1,1 @@
-# Auto preview image design in your Browser
+# index.php for webdesigns
