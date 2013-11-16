@@ -1,0 +1,1 @@
+# Auto preview image design in your Browser
