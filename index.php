@@ -1,7 +1,7 @@
 <?php
 /*
 
-	Webdesign index.php - a2.1
+	Webdesign index.php - a2.2
 	https://github.com/vejnoe/index.php-for-webdesigns
 
 	|||||||||||||||   Vejnø
@@ -251,7 +251,7 @@ function prev_url($files, $file_id, $sub_file_id) {
 	<meta charset="utf-8">
 	<!--
 
-		Webdesign index.php - a2.1
+		Webdesign index.php - a2.2
 		https://github.com/vejnoe/index.php-for-webdesigns
 
 		|||||||||||||||   Vejnø
@@ -274,38 +274,78 @@ function prev_url($files, $file_id, $sub_file_id) {
 	<!--<script src="jquery-1.9.1.js"></script>-->
 	<script>
 		$(document).ready(function() {
-			$(".menu li a.active").addClass('focus');
+			$(".menu li.active").addClass('focus');
 		});
 		$("html").keydown(function(event) {
 			if (event.which == 13) {
 				// Enter
-				if ($('.menu').hasClass('view')) {
+				if (!$('.menu').hasClass('view')) {
+					$('.menu').addClass('view');
+				} else if ($('.menu li.focus').hasClass('active')) {
 					$('.menu').removeClass('view');
 				} else {
-					$('.menu').addClass('view');
+					window.location = $('.menu li.focus a').attr('href');
 				}
 			} else if (event.which == 38) {
 				// Up
-				if ($('.menu').hasClass('view')) {
-					selectNext = $('.menu li a.focus').removeClass('focus').parent().attr('id').substring(10,2);
-					selectNext = selectNext-1;
-					if (selectNext != 0) {
-						selectNext = '.menu li#nr' + selectNext + ' a.focus';
-						console.log($(selectNext));
-						$(selectNext).hide();
-					};
+				// TODO: Make this one and the next a function...
+				if (!$('.menu').hasClass('view')) {
+					$('.menu').addClass('view');
 				};
+
+				currentSelected = $('.menu li.focus').attr('id').substring(10,2);
+				newSelection = currentSelected-1;
+				if (newSelection != 0) {
+					$('.menu li.focus').removeClass('focus');
+					newSelection = '.menu li#nr' + newSelection;
+					$(newSelection).addClass('focus');
+				};
+
+				return false;
 			} else if (event.which == 40) {
 				// Down
-				if ($('.menu').hasClass('view')) {
-					$('.menu li a.focus').next('.menu li a').addClass('focus');
+				if (!$('.menu').hasClass('view')) {
+					$('.menu').addClass('view');
 				};
+				
+				currentSelected = $('.menu li.focus').attr('id').substring(10,2);
+				currentSelected = parseInt(currentSelected);
+				newSelection = currentSelected+1;
+
+				if (!$('.menu li').last().hasClass('focus')) {
+					$('.menu li.focus').removeClass('focus');
+					newSelection = '.menu li#nr' + newSelection.toString();
+					$(newSelection).addClass('focus');
+					console.log(newSelection);
+					console.log($(newSelection));
+				};
+
+				return false;
+				
 			} else if (event.which == 39) {
 				// Right
-
+				if (!$('.menu').hasClass('view')) {
+					currentSelected = $('.menu li.active').attr('id').substring(10,2);
+					currentSelected = parseInt(currentSelected);
+					newSelection = currentSelected+1;
+					
+					if (!$('.menu li').last().hasClass('active')) {
+						newSelection = '.menu li#nr' + newSelection.toString() + ' a';
+						window.location = $(newSelection).attr('href');
+					};
+				};
 			} else if (event.which == 37) {
 				// Left
-
+				if (!$('.menu').hasClass('view')) {
+					currentSelected = $('.menu li.active').attr('id').substring(10,2);
+					currentSelected = parseInt(currentSelected);
+					newSelection = currentSelected-1;
+					
+					if (newSelection != 0) {
+						newSelection = '.menu li#nr' + newSelection.toString() + ' a';
+						window.location = $(newSelection).attr('href');
+					};
+				};
 			}
 			//console.log(event.which);
 		});
@@ -368,7 +408,6 @@ function prev_url($files, $file_id, $sub_file_id) {
 		margin: 0 0 5px;
 		list-style: none;
 	}
-
 	.menu li.folder li {
 		color: #a19fa4;
 		margin: 0 0 5px 20px;
@@ -394,6 +433,19 @@ function prev_url($files, $file_id, $sub_file_id) {
 	}
 	.menu a:hover {
 		color: #e7e5e9;
+	}
+	.menu li.focus,
+	.menu li.focus a {
+		color: #fff;
+	}
+	.info {
+		text-align: right;
+		font-size: 12px;
+		width: 280px;
+		padding: 10px;
+	}
+	.info a {
+		font-size: 12px;
 	}
 	</style>
 </head>
@@ -446,6 +498,7 @@ Next: <?php next_url($files, $file_id, $sub_file_id); ?>
 		<div style="display: block; width: <?php print $page_min_width; ?>; height: <?php print $height; ?>px; margin: auto;"></div>
 	<?php else: ?>
 		<div class="menu">
+			<div class="info"><a href="https://github.com/vejnoe/index.php-for-webdesigns" target="_blank">a2.2</a></div>
 			<ul class="navigation">
 				<?php
 				
