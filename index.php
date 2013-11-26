@@ -1,22 +1,75 @@
 <?php
+/*
 
-// PHP Design Browser a2.0.2
+	Webdesign browser a2.0.3
+
+	|||||||||||||||   Vejnø
+	|||   |||   |||   Andreas Vejnø Andersen
+	|||   |||   |||   www.vejnoe.dk
+	|||||||||||||||   © 2013
+
+*/
+
 
 
 // Settings
-$name = "Kunde navn";
-$total_pages = 7;
+
+$name = "Project Name";
+
 $background_color = "yellow";
 $page_min_width = "960px";
 $margin_bottom = '0px';
+
 $update = 1;
 
-$debug = false;
-
-# Lav url om til noget mere sexet fx. #1/1
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// Debug
+if (isset($_GET ["debug"])) { $debug = $_GET["debug"]; }
+# $debug = true;
 
 
 // Strip sorting numbers and extensions
@@ -38,6 +91,7 @@ function clean_title ($title) {
 	return($title);
 }
 
+
 // Files to skip
 function skip_file ($file_name) {
 	if (
@@ -45,8 +99,18 @@ function skip_file ($file_name) {
 		$file_name == ".." ||
 		$file_name == ".DS_Store" ||
 		$file_name == "index.php" ||
+		
+		substr ($file_name,0,1) == '.' ||
 		substr ($file_name,0,1) == '_' ||
 		substr ($file_name,0,1) == '$'
+	) {
+		return true;
+	} else if (
+		substr($file_name, -3) != 'png' &&
+		substr($file_name, -3) != 'gif' &&
+		substr($file_name, -3) != 'jpg' &&
+		substr($file_name, -4) != 'jpeg' &&
+		(substr($file_name, -3, 1) == '.' || substr($file_name, -4, 1) == '.' || substr($file_name, -5, 1) == '.')
 	) {
 		return true;
 	} else {
@@ -95,12 +159,18 @@ if (isset($_GET["s"])) {
 $sub_file_id = (int) $sub_page;
 
 
-// File name !!!!!!!!!!!!!!!!!!!!!!!
+// File name
 if (gettype($files[$file_id]) == 'array') {
-	$file_name = $files[$file_id][$sub_file_id];
+	if (isset($sub_file_id)) {
+		$i = $sub_file_id;
+	} else {
+		$i = 1;
+	}
+	$file_name = $files[$file_id][$i];
 } else {
 	$file_name = $files[$file_id];
 }
+
 
 // File path
 if (gettype($files[$file_id]) == 'array') {
@@ -115,11 +185,9 @@ if (gettype($files[$file_id]) == 'array') {
 }
 
 
-
 // Getting file info.
 $file_details = getimagesize($file_url);
 list($width, $height, $type, $attr) = $file_details;
-
 
 
 // Next url
@@ -147,50 +215,184 @@ function next_url($files, $file_id, $sub_file_id) {
 	}
 }
 
-
 // Prev url
-// function prev_url($files, $file_id, $sub_file_id) {
-// 	if (gettype($files[$file_id-1]) == 'array') {
-// 		print '?p=';
-// 		print $file_id-1;
-// 		print '&s=';
-// 		print $sub_file_id-1;
-// 	} else {
-// 		print '?p=';
-// 		print $file_id-1;
-// 	}
-// }
+function prev_url($files, $file_id, $sub_file_id) {
+	if (isset($files[$file_id-1])) {
+		$prev_files_is_array = gettype($files[$file_id-1]);
+	} else {
+		$prev_files_is_array = false;
+	}
 
-?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
-	"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+	if ($file_id == 1 && $sub_file_id == 1) {
+		return false;
+	} else if (gettype($files[$file_id]) == 'array' && $sub_file_id >= 2) {
+		print '?p=';
+		print $file_id;
+		print '&s=';
+		print $sub_file_id-1;
+	} else if ($prev_files_is_array) {
+		print '?p=';
+		print $file_id-1;
+		print '&s=';
+		print count($files[$file_id-1])-1;
+	} else if ($file_id-1 == 1) {
+		print '?p=1';
+	} else {
+		print '?p=';
+		print $file_id-1;
+	}
+}
+
+?><!doctype html>
+<html>
 <head>
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<meta charset="utf-8">
 	<!--
 
-		||||||||||||||| 	Vejnø
-		|||   |||   ||| 	Andreas Vejnø Andersen
-		|||   |||   ||| 	www.vejnoe.dk
-		||||||||||||||| 	© <?php print date('Y'); ?>
+		|||||||||||||||   Vejnø
+		|||   |||   |||   Andreas Vejnø Andersen
+		|||   |||   |||   www.vejnoe.dk
+		|||||||||||||||   © <?php print date('Y'); ?>
 
 	-->
-	<title><?php print clean_title($file_name) . ' - ' . $name; ?></title>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+	<title><?php
+		print clean_title($file_name);
+		if ($sub_file_id > 1) {
+			print ' - ' . clean_title($files[$file_id][0]);
+		}
+		print ' — ' . $name;
+	?></title>
+
+	<script src="//code.jquery.com/jquery-1.10.2.min.js"></script>
+	<!--<script src="jquery-1.9.1.js"></script>-->
+	<script>
+		$(document).ready(function() {
+			$(".menu li a.active").addClass('focus');
+		});
+		$("html").keydown(function(event) {
+			if (event.which == 13) {
+				// Enter
+				if ($('.menu').hasClass('view')) {
+					$('.menu').removeClass('view');
+				} else {
+					$('.menu').addClass('view');
+				}
+			} else if (event.which == 38) {
+				// Up
+				if ($('.menu').hasClass('view')) {
+					selectNext = $('.menu li a.focus').removeClass('focus').parent().attr('id').substring(10,2);
+					selectNext = selectNext-1;
+					if (selectNext != 0) {
+						selectNext = '.menu li#nr' + selectNext + ' a.focus';
+						console.log($(selectNext));
+						$(selectNext).hide();
+					};
+				};
+			} else if (event.which == 40) {
+				// Down
+				if ($('.menu').hasClass('view')) {
+					$('.menu li a.focus').next('.menu li a').addClass('focus');
+				};
+			} else if (event.which == 39) {
+				// Right
+
+			} else if (event.which == 37) {
+				// Left
+
+			}
+			//console.log(event.which);
+		});
+	</script>
+
+	<link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,600' rel='stylesheet'>
+	<style>
+	html,body,p,ol,ul,li,a,em {
+		font-family: 'Source Sans Pro', sans-serif;
+		font-weight: 300;
+		font-size: 16px;
+	}
+	body {
+		background: url('<?php print $file_path . '?v=' . $update; ?>') top center <?php print $background_color; ?> no-repeat;
+		margin: 0 0 <?php print $margin_bottom; ?>;
+	}
+	.menu {
+		background: #4d4a51;
+		box-shadow: inset rgba(39, 37, 41, .30) -5px 0 8px;
+		width: 300px;
+		height: 100%;
+		position: fixed;
+		overflow-y: auto;
+		visibility: visible;
+		-webkit-transform: translate3d(-100%, 0, 0);
+		transform: translate3d(-100%, 0, 0);
+
+		-webkit-transition: all 0.5s;
+		transition: all 0.5s;
+	}
+	.menu.view {
+		visibility: visible;
+		-webkit-transform: translate3d(0, 0, 0);
+		transform: translate3d(0, 0, 0);
+	}
+	.menu.active {
+		left: 0;
+	}
+	.menu ul {
+		font: normal 16px / normal 'Varela Round', Helvetica, Arial, sans-serif;
+		text-shadow: rgba(46, 43, 49, 0.35) 0 -1px 0;
+		padding: 0;
+		margin: 20px;
+	}
+	.menu ul ul {
+		border-bottom: 1px solid #46434a;
+		margin: 0 0 20px;
+	    padding: 0 0 10px;
+	}
+	.menu li {
+		color: #a19fa4;
+		margin: 0 0 2px 0;
+	 	list-style: none;
+	}
+	.menu li.folder {
+		margin: 0 0 5px;
+		list-style: none;
+	}
+	.menu li.folder li {
+		color: #a19fa4;
+		margin: 0 0 2px 20px;
+	 	list-style: circle;
+	}
+	.menu h3 {
+		border-top: 1px solid #46434a;
+	 	font-size: 18px;
+		font-weight: normal;
+		color: #e7e5e9;
+		margin: 20px 0 5px;
+		padding: 10px 0 0;
+	}
+	.menu a {
+		color: #a19fa4;
+		text-decoration: none;
+	}
+	.menu a:hover {
+		color: #e7e5e9;
+	}
+
+	</style>
 </head>
-<body style="background: url(<?php print $file_path . '?v=' . $update . ') top center ' . $background_color . ' no-repeat; margin: 0 0 ' . $margin_bottom; ?>;">
+<body>
 	
-	<?php if($debug) { ?>
+	<?php if(isset($debug)) { ?>
 	<div style="background: rgba(255,255,255,.8); margin: 40px; padding: 30px; position: fixed;">
 		<pre>
-???: <?php print_r(gettype($files[$file_id]) != 'array'); ?>
 
-???: <?php print_r($file_id == count($files)) ?>
-
-HER ER LØSNINGEN!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! <?php print_r(count($files[8])); ?>
+??: <?php print_r((substr('readme.smd', -3, 1) == '.' || substr('readme.smd', -4, 1) == '.' || substr('readme.smd', -5, 1) == '.')) ?>
 
 $_GET["p"]: <?php if (isset($_GET["p"])) { print $_GET["p"]; } else { print 'Er ikke sat'; } ?>
 
-$file_id: <?php print_r($file_id);  ?>
+$file_id: <?php print_r($file_id);	?>
 
 $sub_file_id: <?php print $sub_file_id; ?>
 
@@ -201,6 +403,8 @@ $file_name: <?php print $file_name; ?>
 empty($files[$file_id][$sub_file_id+1]): <?php print_r(empty($files[$file_id][$sub_file_id+1])); ?>
 
 clean_title($file_name): <?php print clean_title($file_name); ?>
+
+
 
 Nummer? <?php print_r(is_numeric(substr($file_path,0,1))); ?>
 
@@ -218,12 +422,51 @@ Next: <?php next_url($files, $file_id, $sub_file_id); ?>
 
 		</pre>
 	</div>
-	<?php } ?>
+	<?php } // END if debug ?>
 	
 	
-	<?php if ($total_pages == 1): ?>
+	<?php if (count($files) == 1): ?>
 		<div style="display: block; width: <?php print $page_min_width; ?>; height: <?php print $height; ?>px; margin: auto;"></div>
 	<?php else: ?>
+		<div class="menu">
+			<ul class="navigation">
+				<?php
+				
+				$i = 1;
+				$ii = 1;
+				$iii = 1;
+				
+				foreach ($files as $file)
+					{
+						if (gettype($file) == 'array') {
+							print '<li class="folder"><h3>' . clean_title($file[0]) . '</h3><ul>';
+							foreach (array_slice($file, 1) as $subfile) {
+								print '<li id="nr'. $iii .'"><a href="?p=' . $i . '&s=' . $ii . '"';
+								if ($i == $file_id && $ii == $sub_file_id) {
+									print ' class="active"';
+								}
+								print '>' . clean_title($subfile) . '</a></li>';
+								$ii++;
+								$iii++;
+							}
+							$ii = 1;
+							print '</ul></li>';
+						} else {
+							print '<li id="nr'. $iii .'"><a href="?p=' . $i . '"';
+							if ($i == $file_id) {
+								print ' class="active"';
+							}
+							print '>' . clean_title($file) . '</a></li>';
+							$iii++;
+						}
+						$i++;
+						
+					}
+				?>
+			</ul>
+			<!--<a href="<?php prev_url($files, $file_id, $sub_file_id); ?>">Back [<?php prev_url($files, $file_id, $sub_file_id); ?>]</a>-->
+		</div>
+
 		<a href="<?php next_url($files, $file_id, $sub_file_id); ?>" style="display: block; width: <?php print $page_min_width; ?>; height: <?php print $height; ?>px; margin: auto;"></a>
 	<?php endif; ?>
 </body>

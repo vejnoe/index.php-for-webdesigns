@@ -1,1 +1,2 @@
-# index.php for webdesigns
+# View your web design image-files as a "real" website
+
