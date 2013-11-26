@@ -1,7 +1,8 @@
 <?php
 /*
 
-	Webdesign browser a2.0.3
+	Webdesign index.php - a2.1
+	https://github.com/vejnoe/index.php-for-webdesigns
 
 	|||||||||||||||   Vejnø
 	|||   |||   |||   Andreas Vejnø Andersen
@@ -14,13 +15,14 @@
 
 // Settings
 
-$name = "Project Name";
+$name = "Project Title"; // Surfix for page title (Project name).
 
-$background_color = "yellow";
-$page_min_width = "960px";
-$margin_bottom = '0px';
+$background_color = "#FFF"; // Background color, if your layout don't have full with.
+$active_color = "#87CEEB"; // Menu active link color (Default #87CEEB)
+$page_min_width = "960px"; // Page with.
+$margin_bottom = '0px'; // If you Photoshop workflow cuts the buttom margin of your layout.
 
-$update = 1;
+$update = 1; // To force browser to update, plus the number every time you update your files.
 
 
 
@@ -249,6 +251,9 @@ function prev_url($files, $file_id, $sub_file_id) {
 	<meta charset="utf-8">
 	<!--
 
+		Webdesign index.php - a2.1
+		https://github.com/vejnoe/index.php-for-webdesigns
+
 		|||||||||||||||   Vejnø
 		|||   |||   |||   Andreas Vejnø Andersen
 		|||   |||   |||   www.vejnoe.dk
@@ -336,41 +341,52 @@ function prev_url($files, $file_id, $sub_file_id) {
 		-webkit-transform: translate3d(0, 0, 0);
 		transform: translate3d(0, 0, 0);
 	}
-	.menu.active {
-		left: 0;
-	}
 	.menu ul {
 		font: normal 16px / normal 'Varela Round', Helvetica, Arial, sans-serif;
 		text-shadow: rgba(46, 43, 49, 0.35) 0 -1px 0;
 		padding: 0;
-		margin: 20px;
+		margin: 40px 20px;
 	}
 	.menu ul ul {
 		border-bottom: 1px solid #46434a;
 		margin: 0 0 20px;
-	    padding: 0 0 10px;
+		padding: 0 0 10px;
 	}
 	.menu li {
 		color: #a19fa4;
-		margin: 0 0 2px 0;
-	 	list-style: none;
+		margin: 0 0 5px 0;
+		list-style: none;
+	}
+	.menu ul li.active a {
+		color: <?php print $active_color; ?>;
+	}
+	.menu ul li.folder li.active {
+		list-style: disc;
+		color: <?php print $active_color; ?>;
 	}
 	.menu li.folder {
 		margin: 0 0 5px;
 		list-style: none;
 	}
+
 	.menu li.folder li {
 		color: #a19fa4;
-		margin: 0 0 2px 20px;
-	 	list-style: circle;
+		margin: 0 0 5px 20px;
+		list-style: circle;
 	}
 	.menu h3 {
 		border-top: 1px solid #46434a;
-	 	font-size: 18px;
+		font-size: 18px;
 		font-weight: normal;
 		color: #e7e5e9;
 		margin: 20px 0 5px;
 		padding: 10px 0 0;
+	}
+	.menu li.folder+li.folder h3,
+	.menu li:first-child h3 {
+		border-top: none;
+		margin: -10px 0 5px;
+		padding: 0 0 0;
 	}
 	.menu a {
 		color: #a19fa4;
@@ -379,12 +395,11 @@ function prev_url($files, $file_id, $sub_file_id) {
 	.menu a:hover {
 		color: #e7e5e9;
 	}
-
 	</style>
 </head>
-<body>
-	
-	<?php if(isset($debug)) { ?>
+<body><?php
+	// Debugging
+	if(isset($debug)) { ?>
 	<div style="background: rgba(255,255,255,.8); margin: 40px; padding: 30px; position: fixed;">
 		<pre>
 
@@ -422,7 +437,9 @@ Next: <?php next_url($files, $file_id, $sub_file_id); ?>
 
 		</pre>
 	</div>
-	<?php } // END if debug ?>
+	<?php }
+	// END if debug
+	?>
 	
 	
 	<?php if (count($files) == 1): ?>
@@ -441,22 +458,22 @@ Next: <?php next_url($files, $file_id, $sub_file_id); ?>
 						if (gettype($file) == 'array') {
 							print '<li class="folder"><h3>' . clean_title($file[0]) . '</h3><ul>';
 							foreach (array_slice($file, 1) as $subfile) {
-								print '<li id="nr'. $iii .'"><a href="?p=' . $i . '&s=' . $ii . '"';
+								print '<li id="nr'. $iii .'"';
 								if ($i == $file_id && $ii == $sub_file_id) {
 									print ' class="active"';
 								}
-								print '>' . clean_title($subfile) . '</a></li>';
+								print '><a href="?p=' . $i . '&s=' . $ii . '">' . clean_title($subfile) . '</a></li>';
 								$ii++;
 								$iii++;
 							}
 							$ii = 1;
 							print '</ul></li>';
 						} else {
-							print '<li id="nr'. $iii .'"><a href="?p=' . $i . '"';
+							print '<li id="nr'. $iii .'"';
 							if ($i == $file_id) {
 								print ' class="active"';
 							}
-							print '>' . clean_title($file) . '</a></li>';
+							print '><a href="?p=' . $i . '">' . clean_title($file) . '</a></li>';
 							$iii++;
 						}
 						$i++;
