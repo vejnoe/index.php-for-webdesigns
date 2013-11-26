@@ -1,7 +1,4 @@
-# View your web design
-image-files as a "real" website
-in your Browser #
-
+# Show your design files as a website
 This project is still in alpha so please come with your comment and idéers!
 
 ## How to use
