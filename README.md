@@ -6,3 +6,6 @@ This project is still in alpha so please come with your comment and idéers!
 - Place you image files in the same folder (JPG, PNG or GIF).
 - Sort your files with leading numbers like: 01 Home.jpg, 02 About.jpg, 03 Contact.jpg
 - You can even group your file in folders
+
+## Demo
+http://www.vejnoe.dk/muubs
