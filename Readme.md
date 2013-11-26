@@ -9,3 +9,7 @@ This project is still in alpha so please come with your comment and idéers!
 
 ## Demo
 http://www.vejnoe.dk/muubs
+
+## TODOs
+- [ ] Sorting not working on Linux server
+- [x] Show menu structor
