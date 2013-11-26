@@ -3,13 +3,15 @@ This project is still in alpha so please come with your comment and idéers!
 
 ## How to use
 - Grap the index.php file and place it in the root of the folder you wish to use
-- Place you image files in the same folder (JPG, PNG or GIF)
-- Sort your files with leading numbers like: 01 Home.jpg, 02 About.jpg, 03 Contact.jpg
+- Place you image files in the same folder `(JPG, PNG or GIF)`
+- Sort your files with leading numbers like: `01 Home.jpg`, `02 About.jpg`, `03 Contact.jpg`
 - You can even group your file in folders
 
-* Keyboard navigation
-- Left and Right Arrow keys to go back and forward
-- Up adn Down Arrow to na
+**Keyboard navigation**
+
+- `Left-` and `Right Arrow Keys` to go back and forward
+- `Enter Key` to toggle the menu
+- `Up-` and `Down Arrow Keys` to navigate the menu, `Enter Key` to enter the selected page 
 
 ## Demo
 http://www.vejnoe.dk/muubs
