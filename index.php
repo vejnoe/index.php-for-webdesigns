@@ -1,7 +1,7 @@
 <?php
 /*
 
-	Webdesign index.php - a2.3
+	Webdesign index.php - Alpha 2.3.1
 	https://github.com/vejnoe/index.php-for-webdesigns
 
 	|||||||||||||||   Vejnø
@@ -251,7 +251,7 @@ function prev_url($files, $file_id, $sub_file_id) {
 	<meta charset="utf-8">
 	<!--
 
-		Webdesign index.php - a2.3
+		Webdesign index.php - Alpha 2.3.1
 		https://github.com/vejnoe/index.php-for-webdesigns
 
 		|||||||||||||||   Vejnø
@@ -378,6 +378,7 @@ function prev_url($files, $file_id, $sub_file_id) {
 
 	<link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,600' rel='stylesheet'>
 	<style>
+	/* Layout */
 	html,body,span,p,ol,ul,li,a,em,h1,h2,h3,h4,h5,h6  {
 		font-family: 'Source Sans Pro', sans-serif;
 		font-weight: 300;
@@ -387,6 +388,26 @@ function prev_url($files, $file_id, $sub_file_id) {
 		background: url('<?php print $file_path . '?v=' . $update; ?>') top center <?php print $background_color; ?> no-repeat;
 		margin: 0 0 <?php print $margin_bottom; ?>;
 	}
+
+	/* Text */
+	h1 {
+		font-size: 60px;
+	}
+	h2 {
+		font-size: 14px;
+		font-weight: 600;
+		text-transform: uppercase;
+	}
+	h3 {
+		font-size: 18px;
+		font-weight: 300;
+		color: #e7e5e9;
+	}
+	strong {
+		font-weight: 600;
+	}
+	
+	/* Menu */
 	.menu {
 		background: #4d4a51;
 		box-shadow: inset rgba(39, 37, 41, .30) -5px 0 8px;
@@ -467,15 +488,25 @@ function prev_url($files, $file_id, $sub_file_id) {
 	.menu li:last-child ul {
 		border-bottom: none;
 	}
+
+	/* Menu - Info */
 	.info {
 		font-size: 12px;
 		padding: 10px 20px;
-		color: #A19FA4;
+		color: #a19fa4;
+		font-weight: 600;
 	}
 	.info a {
+		color: #a19fa4;
 		font-size: 12px;
+		text-decoration: underline;
+		font-weight: 600;
+	}
+	.info a:hover {
+		text-decoration: none;
 	}
 
+	/* Overlays */
 	.overlay#help {
 		background-color: rgba(255, 255, 255, 0.9);
 		position: fixed;
@@ -506,19 +537,7 @@ function prev_url($files, $file_id, $sub_file_id) {
 		box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
 	}
 
-	h1 {
-		font-size: 60px;
-	}
-	h2 {
-		font-size: 14px;
-		font-weight: 600;
-		text-transform: uppercase;
-	}
-	h3 {
-		font-size: 18px;
-		font-weight: normal;
-		color: #e7e5e9;
-	}
+	/* Keys */
 	.key {
 		font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
 		font-size: 14px;
@@ -537,7 +556,7 @@ function prev_url($files, $file_id, $sub_file_id) {
 		background: #46434a;
 		background: #fff;
 		margin-right: 10px;
-		vertical-align: sub;
+		vertical-align: baseline;
 	}
 	.key:hover {
 		background: rgb(250,250,250);
@@ -552,6 +571,11 @@ function prev_url($files, $file_id, $sub_file_id) {
 		padding-bottom: 2px;
 		line-height: 38px;
 	}
+	.key.esc {
+		font-size: 11px;
+	}
+
+	/* Help page */
 	.keys {
 		padding: 10px 0 0;
 		border-top: 1px solid rgba(0,0,0,0.1);
@@ -564,7 +588,7 @@ function prev_url($files, $file_id, $sub_file_id) {
 	</style>
 </head>
 <body><?php
-	// Debugging
+// Debugging
 	if(isset($debug)) { ?>
 	<div style="background: rgba(255,255,255,.8); margin: 40px; padding: 30px; position: fixed;">
 		<pre>
@@ -604,7 +628,7 @@ Next: <?php next_url($files, $file_id, $sub_file_id); ?>
 		</pre>
 	</div>
 	<?php }
-	// END if debug
+// END if debug
 	?>
 	
 	<?php if (count($files) == 1): ?>
@@ -628,6 +652,9 @@ Next: <?php next_url($files, $file_id, $sub_file_id); ?>
 					<li><span class="key down">&#x2193;</span> Move selection down in menu</li>
 					<li><span class="key enter">&#x21a9;</span> Toggle menu view<li>
 				</ul>
+				<ul class="keys">
+					<li><span class="key esc">esc</span> Close all overlays<li>
+				</ul>
 			</div>
 		</div>
 		<?php if ($file_id == 1 && $sub_file_id == 1) { ?>
@@ -641,7 +668,7 @@ Next: <?php next_url($files, $file_id, $sub_file_id); ?>
 		</div>
 		<?php } ?>
 		<div class="menu">
-			<div class="info">Press "?" for help.&nbsp;&nbsp;<a href="https://github.com/vejnoe/index.php-for-webdesigns" target="_blank">a2.3</a></div>
+			<div class="info">Press <strong>?</strong> for help&nbsp;&mdash;&nbsp;<a href="https://github.com/vejnoe/index.php-for-webdesigns" target="_blank" title="GitHub">Alpha 2.3.1, change log</a></div>
 			<ul class="navigation">
 				<?php
 				
@@ -677,7 +704,6 @@ Next: <?php next_url($files, $file_id, $sub_file_id); ?>
 					}
 				?>
 			</ul>
-			<!--<a href="<?php prev_url($files, $file_id, $sub_file_id); ?>">Back [<?php prev_url($files, $file_id, $sub_file_id); ?>]</a>-->
 		</div>
 
 		<a href="<?php next_url($files, $file_id, $sub_file_id); ?>" style="display: block; width: <?php print $page_min_width; ?>; height: <?php print $height; ?>px; margin: auto;"></a>
