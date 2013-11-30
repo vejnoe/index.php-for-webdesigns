@@ -1,7 +1,7 @@
 <?php
 /*
 
-	Webdesign index.php - Alpha 2.3.1
+	Webdesign index.php - Alpha 2.3.2
 	https://github.com/vejnoe/index.php-for-webdesigns
 
 	|||||||||||||||   Vejnø
@@ -251,7 +251,7 @@ function prev_url($files, $file_id, $sub_file_id) {
 	<meta charset="utf-8">
 	<!--
 
-		Webdesign index.php - Alpha 2.3.1
+		Webdesign index.php - Alpha 2.3.2
 		https://github.com/vejnoe/index.php-for-webdesigns
 
 		|||||||||||||||   Vejnø
@@ -650,7 +650,7 @@ Next: <?php next_url($files, $file_id, $sub_file_id); ?>
 				<ul class="keys">
 					<li><span class="key up">&#x2191;</span> Move selection up in menu</li>
 					<li><span class="key down">&#x2193;</span> Move selection down in menu</li>
-					<li><span class="key enter">&#x21a9;</span> Toggle menu view<li>
+					<li><span class="key enter">&#x21a9;</span> Go to selection<li>
 				</ul>
 				<ul class="keys">
 					<li><span class="key esc">esc</span> Close all overlays<li>
@@ -668,7 +668,7 @@ Next: <?php next_url($files, $file_id, $sub_file_id); ?>
 		</div>
 		<?php } ?>
 		<div class="menu">
-			<div class="info">Press <strong>?</strong> for help&nbsp;&mdash;&nbsp;<a href="https://github.com/vejnoe/index.php-for-webdesigns" target="_blank" title="GitHub">Alpha 2.3.1, change log</a></div>
+			<div class="info">Press <strong>?</strong> for help&nbsp;&mdash;&nbsp;<a href="https://github.com/vejnoe/index.php-for-webdesigns" target="_blank" title="GitHub">Alpha 2.3.2, change log</a></div>
 			<ul class="navigation">
 				<?php
 				
