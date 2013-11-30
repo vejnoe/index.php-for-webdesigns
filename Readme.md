@@ -6,13 +6,20 @@ This project is still in alpha so please come with your comment and idéers!
 - Place you image files in the same folder `(JPG, PNG or GIF)`
 - Sort your files with leading numbers like: `01 Home.jpg`, `02 About.jpg`, `03 Contact.jpg`
 - You can even group your file in folders
-![ScreenShot](http://www.vejnoe.dk/webp/muubs-structure.png)
+  - ![ScreenShot](http://www.vejnoe.dk/webp/muubs-structure.png)
 
 **Keyboard navigation**
 
-- `Left-` and `Right Arrow Keys` to go back and forward
-- `Enter Key` to toggle the menu
-- `Up-` and `Down Arrow Keys` to navigate the menu, `Enter Key` to enter the selected page 
+- `?` Show this help page
+<hr>
+- `←` `→` Navigating pages
+<hr>
+- `↩ `Toggle menu view
+- `esc` Close all overlays
+<hr>
+- `↑` Move selection up in menu
+- `↓` Move selection down in menu
+- `↩` Go to selection
 
 ## Demo
 http://www.vejnoe.dk/muubs
