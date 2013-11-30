@@ -1,7 +1,7 @@
 <?php
 /*
 
-	Webdesign index.php - a2.2
+	Webdesign index.php - a2.3
 	https://github.com/vejnoe/index.php-for-webdesigns
 
 	|||||||||||||||   Vejnø
@@ -251,7 +251,7 @@ function prev_url($files, $file_id, $sub_file_id) {
 	<meta charset="utf-8">
 	<!--
 
-		Webdesign index.php - a2.2
+		Webdesign index.php - a2.3
 		https://github.com/vejnoe/index.php-for-webdesigns
 
 		|||||||||||||||   Vejnø
@@ -273,9 +273,6 @@ function prev_url($files, $file_id, $sub_file_id) {
 	<script src="//code.jquery.com/jquery-1.10.2.min.js"></script>
 	<!--<script src="jquery-1.9.1.js"></script>-->
 	<script>
-		$(document).ready(function() {
-			$(".menu li.active").addClass('focus');
-		});
 		$("html").keydown(function(event) {
 			if (event.which == 13) {
 				// Enter
@@ -283,6 +280,7 @@ function prev_url($files, $file_id, $sub_file_id) {
 					$('.menu').addClass('view');
 				} else if ($('.menu li.focus').hasClass('active')) {
 					$('.menu').removeClass('view');
+					$('.overlay').fadeOut().removeClass('view');
 				} else {
 					window.location = $('.menu li.focus a').attr('href');
 				}
@@ -346,14 +344,41 @@ function prev_url($files, $file_id, $sub_file_id) {
 						window.location = $(newSelection).attr('href');
 					};
 				};
+			} else if (event.which == 171 || event.which == 191 || event.which == 187) {
+				// ?
+				if (!$('#help').hasClass('view')) {
+					$('#help').fadeIn().addClass('view');
+					$('.menu').addClass('view');
+					$('#quick-guide').fadeOut();
+				} else {
+					$('#help').fadeOut().removeClass('view');
+					$('.menu').removeClass('view');
+					$('#quick-guide').fadeOut();
+				}
+			} else if (event.which == 27) {
+				// ESC
+				$('.overlay').fadeOut().removeClass('view');
+				$('.menu').removeClass('view');
 			}
-			//console.log(event.which);
+			console.log(event.which);
+		});
+		
+
+		$(document).ready(function() {
+			$(".menu li.active").addClass('focus');
+			$('.overlay').click(function(){
+				$('.overlay').fadeOut().removeClass('view');
+				$('.menu').removeClass('view');
+			});
+			setTimeout( function(){
+     			$('#quick-guide').fadeOut();
+    		},5000);
 		});
 	</script>
 
 	<link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,600' rel='stylesheet'>
 	<style>
-	html,body,p,ol,ul,li,a,em {
+	html,body,span,p,ol,ul,li,a,em,h1,h2,h3,h4,h5,h6  {
 		font-family: 'Source Sans Pro', sans-serif;
 		font-weight: 300;
 		font-size: 16px;
@@ -368,6 +393,7 @@ function prev_url($files, $file_id, $sub_file_id) {
 		width: 300px;
 		height: 100%;
 		position: fixed;
+		overflow-x: hidden;
 		overflow-y: auto;
 		visibility: visible;
 		-webkit-transform: translate3d(-100%, 0, 0);
@@ -415,9 +441,6 @@ function prev_url($files, $file_id, $sub_file_id) {
 	}
 	.menu h3 {
 		border-top: 1px solid #46434a;
-		font-size: 18px;
-		font-weight: normal;
-		color: #e7e5e9;
 		margin: 20px 0 5px;
 		padding: 10px 0 0;
 	}
@@ -426,6 +449,9 @@ function prev_url($files, $file_id, $sub_file_id) {
 		border-top: none;
 		margin: -10px 0 5px;
 		padding: 0 0 0;
+	}
+	.menu li a {
+		display: block;
 	}
 	.menu a {
 		color: #a19fa4;
@@ -438,14 +464,102 @@ function prev_url($files, $file_id, $sub_file_id) {
 	.menu li.focus a {
 		color: #fff;
 	}
+	.menu li:last-child ul {
+		border-bottom: none;
+	}
 	.info {
-		text-align: right;
 		font-size: 12px;
-		width: 280px;
-		padding: 10px;
+		padding: 10px 20px;
+		color: #A19FA4;
 	}
 	.info a {
 		font-size: 12px;
+	}
+
+	.overlay#help {
+		background-color: rgba(255, 255, 255, 0.9);
+		position: fixed;
+		height: 100%;
+		width: 100%;
+		display: none;
+		overflow-x: hidden;
+		overflow-y: auto;
+	}
+	.overlay#help .help {
+		margin-left: 300px;
+		padding: 20px 60px;
+	}
+	.overlay#quick-guide {
+		height: 100%;
+		position: fixed;
+		width: 100%;
+	}
+	.overlay#quick-guide .quick-guide {
+		background: none repeat scroll 0 0 rgba(255, 255, 255, 0.9);
+		border-radius: 4px;
+		left: 50%;
+		margin: -90px auto auto -250px;
+		padding: 10px 20px 20px;
+		position: fixed;
+		top: 50%;
+		width: 500px;
+		box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+	}
+
+	h1 {
+		font-size: 60px;
+	}
+	h2 {
+		font-size: 14px;
+		font-weight: 600;
+		text-transform: uppercase;
+	}
+	h3 {
+		font-size: 18px;
+		font-weight: normal;
+		color: #e7e5e9;
+	}
+	.key {
+		font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+		font-size: 14px;
+		font-weight: bold;
+		
+		border-radius: 3px;
+		border: 1px solid rgba(0,0,0,0.2);
+		border-bottom: 2px solid rgba(0,0,0,0.2);
+		box-shadow: 0 0 6px rgba(0,0,0,0.07);
+		color: #777;
+		
+		width: 40px;
+		line-height: 40px;
+		display: inline-block;
+		text-align: center;
+		background: #46434a;
+		background: #fff;
+		margin-right: 10px;
+		vertical-align: sub;
+	}
+	.key:hover {
+		background: rgb(250,250,250);
+	}
+	.key.enter {
+		padding-top: 20px;
+	}
+	.key.left,
+	.key.right,
+	.key.up,
+	.key.down {
+		padding-bottom: 2px;
+		line-height: 38px;
+	}
+	.keys {
+		padding: 10px 0 0;
+		border-top: 1px solid rgba(0,0,0,0.1);
+		margin: 10px 0 0;
+	}
+	.keys li {
+		margin-bottom: 10px;
+		list-style: none;
 	}
 	</style>
 </head>
@@ -493,12 +607,41 @@ Next: <?php next_url($files, $file_id, $sub_file_id); ?>
 	// END if debug
 	?>
 	
-	
 	<?php if (count($files) == 1): ?>
 		<div style="display: block; width: <?php print $page_min_width; ?>; height: <?php print $height; ?>px; margin: auto;"></div>
 	<?php else: ?>
+		<div class="overlay" id="help">
+			<div class="help">
+				<h1><?php print $name; ?></h1>
+				<h2>Keyboard shortcut</h2>
+				<ul class="keys">
+					<li><span class="key">?</span> Show this help page</li>
+				</ul>
+				<ul class="keys">
+					<li><span class="key left">&#x2190;</span><span class="key right">&#x2192;</span> Navigating pages</li>
+				</ul>
+				<ul class="keys">
+					<li><span class="key enter">&#x21a9;</span> Toggle menu view<li>
+				</ul>
+				<ul class="keys">
+					<li><span class="key up">&#x2191;</span> Move selection up in menu</li>
+					<li><span class="key down">&#x2193;</span> Move selection down in menu</li>
+					<li><span class="key enter">&#x21a9;</span> Toggle menu view<li>
+				</ul>
+			</div>
+		</div>
+		<?php if ($file_id == 1 && $sub_file_id == 1) { ?>
+		<div class="overlay" id="quick-guide">
+			<div class="quick-guide">
+				<h2><?php print $name; ?></h2>
+				<ul class="keys">
+					<li><span class="key left">&#x2190;</span><span class="key right">&#x2192;</span> to navigating pages or press <span class="key enter" style="margin-left: 10px;">&#x21a9;</span> to toggle menu view.<li>
+				</ul>
+			</div>
+		</div>
+		<?php } ?>
 		<div class="menu">
-			<div class="info"><a href="https://github.com/vejnoe/index.php-for-webdesigns" target="_blank">a2.2</a></div>
+			<div class="info">Press "?" for help.&nbsp;&nbsp;<a href="https://github.com/vejnoe/index.php-for-webdesigns" target="_blank">a2.3</a></div>
 			<ul class="navigation">
 				<?php
 				
@@ -539,5 +682,6 @@ Next: <?php next_url($files, $file_id, $sub_file_id); ?>
 
 		<a href="<?php next_url($files, $file_id, $sub_file_id); ?>" style="display: block; width: <?php print $page_min_width; ?>; height: <?php print $height; ?>px; margin: auto;"></a>
 	<?php endif; ?>
+	
 </body>
 </html>
