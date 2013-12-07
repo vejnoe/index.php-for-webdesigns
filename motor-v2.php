@@ -1,7 +1,7 @@
 <?php
 /*
 
-	Webdesign index.php - Beta v1.0
+	Webdesign index.php - a2.1
 	https://github.com/vejnoe/index.php-for-webdesigns
 
 	|||||||||||||||   Vejnø
@@ -121,7 +121,34 @@ function skip_file ($file_name) {
 }
 
 
-// Getting files into the array $files.
+// TODO: Rewrite to use scandir() in stead of opendir();
+$files = array();
+if ($level_1_handle = opendir ('.')) {
+	$i = 1; $ii = 1;
+	while (false !== ($level_1_entry = readdir ($level_1_handle))) {
+		if (!skip_file ($level_1_entry)) {
+			$files[$i] = $level_1_entry;
+			if (is_dir($level_1_entry)) {
+				$files[$i] = array();
+				if ($level_2_handle = opendir ($level_1_entry)) {
+					while (false !== ($level_2_entry = readdir ($level_2_handle))) {
+						if (!skip_file ($level_2_entry)) {
+							$files[$i][] = $level_1_entry;
+							$files[$i][$ii] = $level_2_entry;
+							$ii++;
+						}
+					}
+					closedir ($level_2_handle);
+				}
+			}
+			$i++; $ii = 1;
+		}
+	}
+	closedir ($level_1_handle);
+}
+
+
+// V2 - scandir()
 function ListIn($dir, $prefix = '') {
 	$dir = rtrim($dir, '\\/');
 	$result = array();
@@ -139,10 +166,29 @@ function ListIn($dir, $prefix = '') {
 				$i++;
 			}
 		}
-	}
-	return $result;
+    }
+
+  return $result;
 }
-$files = ListIn('.');
+
+
+
+print_r($files);
+print_r(ListIn('.'));
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 // File ID - Set the current page and sub page.
@@ -249,7 +295,7 @@ function prev_url($files, $file_id, $sub_file_id) {
 	<meta charset="utf-8">
 	<!--
 
-		Webdesign index.php - Beta v1.0
+		Webdesign index.php - a2.1
 		https://github.com/vejnoe/index.php-for-webdesigns
 
 		|||||||||||||||   Vejnø
@@ -271,113 +317,47 @@ function prev_url($files, $file_id, $sub_file_id) {
 	<script src="//code.jquery.com/jquery-1.10.2.min.js"></script>
 	<!--<script src="jquery-1.9.1.js"></script>-->
 	<script>
+		$(document).ready(function() {
+			$(".menu li a.active").addClass('focus');
+		});
 		$("html").keydown(function(event) {
 			if (event.which == 13) {
 				// Enter
-				if (!$('.menu').hasClass('view')) {
-					$('.menu').addClass('view');
-				} else if ($('.menu li.focus').hasClass('active')) {
+				if ($('.menu').hasClass('view')) {
 					$('.menu').removeClass('view');
-					$('.overlay').fadeOut().removeClass('view');
 				} else {
-					window.location = $('.menu li.focus a').attr('href');
+					$('.menu').addClass('view');
 				}
 			} else if (event.which == 38) {
 				// Up
-				// TODO: Make this one and the next a function...
-				if (!$('.menu').hasClass('view')) {
-					$('.menu').addClass('view');
+				if ($('.menu').hasClass('view')) {
+					selectNext = $('.menu li a.focus').removeClass('focus').parent().attr('id').substring(10,2);
+					selectNext = selectNext-1;
+					if (selectNext != 0) {
+						selectNext = '.menu li#nr' + selectNext + ' a.focus';
+						console.log($(selectNext));
+						$(selectNext).hide();
+					};
 				};
-
-				currentSelected = $('.menu li.focus').attr('id').substring(10,2);
-				newSelection = currentSelected-1;
-				if (newSelection != 0) {
-					$('.menu li.focus').removeClass('focus');
-					newSelection = '.menu li#nr' + newSelection;
-					$(newSelection).addClass('focus');
-				};
-
-				return false;
 			} else if (event.which == 40) {
 				// Down
-				if (!$('.menu').hasClass('view')) {
-					$('.menu').addClass('view');
+				if ($('.menu').hasClass('view')) {
+					$('.menu li a.focus').next('.menu li a').addClass('focus');
 				};
-				
-				currentSelected = $('.menu li.focus').attr('id').substring(10,2);
-				currentSelected = parseInt(currentSelected);
-				newSelection = currentSelected+1;
-
-				if (!$('.menu li').last().hasClass('focus')) {
-					$('.menu li.focus').removeClass('focus');
-					newSelection = '.menu li#nr' + newSelection.toString();
-					$(newSelection).addClass('focus');
-					console.log(newSelection);
-					console.log($(newSelection));
-				};
-
-				return false;
-				
 			} else if (event.which == 39) {
 				// Right
-				if (!$('.menu').hasClass('view')) {
-					currentSelected = $('.menu li.active').attr('id').substring(10,2);
-					currentSelected = parseInt(currentSelected);
-					newSelection = currentSelected+1;
-					
-					if (!$('.menu li').last().hasClass('active')) {
-						newSelection = '.menu li#nr' + newSelection.toString() + ' a';
-						window.location = $(newSelection).attr('href');
-					};
-				};
+
 			} else if (event.which == 37) {
 				// Left
-				if (!$('.menu').hasClass('view')) {
-					currentSelected = $('.menu li.active').attr('id').substring(10,2);
-					currentSelected = parseInt(currentSelected);
-					newSelection = currentSelected-1;
-					
-					if (newSelection != 0) {
-						newSelection = '.menu li#nr' + newSelection.toString() + ' a';
-						window.location = $(newSelection).attr('href');
-					};
-				};
-			} else if (event.which == 171 || event.which == 191 || event.which == 187) {
-				// ?
-				if (!$('#help').hasClass('view')) {
-					$('#help').fadeIn().addClass('view');
-					$('.menu').addClass('view');
-					$('#quick-guide').fadeOut();
-				} else {
-					$('#help').fadeOut().removeClass('view');
-					$('.menu').removeClass('view');
-					$('#quick-guide').fadeOut();
-				}
-			} else if (event.which == 27) {
-				// ESC
-				$('.overlay').fadeOut().removeClass('view');
-				$('.menu').removeClass('view');
-			}
-			console.log(event.which);
-		});
-		
 
-		$(document).ready(function() {
-			$(".menu li.active").addClass('focus');
-			$('.overlay').click(function(){
-				$('.overlay').fadeOut().removeClass('view');
-				$('.menu').removeClass('view');
-			});
-			setTimeout( function(){
-	 			$('#quick-guide').fadeOut();
-			},5000);
+			}
+			//console.log(event.which);
 		});
 	</script>
 
 	<link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,600' rel='stylesheet'>
 	<style>
-	/* Layout */
-	html,body,span,p,ol,ul,li,a,em,h1,h2,h3,h4,h5,h6  {
+	html,body,p,ol,ul,li,a,em {
 		font-family: 'Source Sans Pro', sans-serif;
 		font-weight: 300;
 		font-size: 16px;
@@ -386,33 +366,12 @@ function prev_url($files, $file_id, $sub_file_id) {
 		background: url('<?php print $file_path . '?v=' . $update; ?>') top center <?php print $background_color; ?> no-repeat;
 		margin: 0 0 <?php print $margin_bottom; ?>;
 	}
-
-	/* Text */
-	h1 {
-		font-size: 60px;
-	}
-	h2 {
-		font-size: 14px;
-		font-weight: 600;
-		text-transform: uppercase;
-	}
-	h3 {
-		font-size: 18px;
-		font-weight: 300;
-		color: #e7e5e9;
-	}
-	strong {
-		font-weight: 600;
-	}
-	
-	/* Menu */
 	.menu {
-		background: #2F3238;
+		background: #4d4a51;
 		box-shadow: inset rgba(39, 37, 41, .30) -5px 0 8px;
 		width: 300px;
 		height: 100%;
 		position: fixed;
-		overflow-x: hidden;
 		overflow-y: auto;
 		visibility: visible;
 		-webkit-transform: translate3d(-100%, 0, 0);
@@ -438,32 +397,32 @@ function prev_url($files, $file_id, $sub_file_id) {
 		padding: 0 0 10px;
 	}
 	.menu li {
-		color: #fff; /*#a19fa4;*/
+		color: #a19fa4;
 		margin: 0 0 5px 0;
 		list-style: none;
 	}
 	.menu ul li.active a {
 		color: <?php print $active_color; ?>;
 	}
-	.menu ul li.folder li.active,
-	.menu ul li.folder li.focus.active {
+	.menu ul li.folder li.active {
 		list-style: disc;
 		color: <?php print $active_color; ?>;
-	}
-	.menu ul li.folder li.focus.active {
-		text-shadow: 0 0 2px #fff;
 	}
 	.menu li.folder {
 		margin: 0 0 5px;
 		list-style: none;
 	}
+
 	.menu li.folder li {
-		color: #B8B9BC; /*#a19fa4;*/
+		color: #a19fa4;
 		margin: 0 0 5px 20px;
 		list-style: circle;
 	}
 	.menu h3 {
 		border-top: 1px solid #46434a;
+		font-size: 18px;
+		font-weight: normal;
+		color: #e7e5e9;
 		margin: 20px 0 5px;
 		padding: 10px 0 0;
 	}
@@ -473,126 +432,17 @@ function prev_url($files, $file_id, $sub_file_id) {
 		margin: -10px 0 5px;
 		padding: 0 0 0;
 	}
-	.menu li a {
-		display: block;
-	}
 	.menu a {
-		color: #B8B9BC; /*#a19fa4;*/
+		color: #a19fa4;
 		text-decoration: none;
 	}
-	.menu a:hover,
-	.menu ul li.folder li:hover,
-	.menu ul li.folder li.focus {
-		color: #fff; /*#e7e5e9;*/
-	}
-	.menu li.focus,
-	.menu li.focus a {
-		color: #fff;
-	}
-	.menu li:last-child ul {
-		border-bottom: none;
-	}
-
-	/* Menu - Info */
-	.info {
-		font-size: 12px;
-		padding: 10px 20px;
-		color: #a19fa4;
-		font-weight: 600;
-	}
-	.info a {
-		color: #a19fa4;
-		font-size: 12px;
-		text-decoration: underline;
-		font-weight: 600;
-	}
-	.info a:hover {
-		text-decoration: none;
-	}
-
-	/* Overlays */
-	.overlay#help {
-		background-color: rgba(255, 255, 255, 0.9);
-		position: fixed;
-		height: 100%;
-		width: 100%;
-		display: none;
-		overflow-x: hidden;
-		overflow-y: auto;
-	}
-	.overlay#help .help {
-		margin-left: 300px;
-		padding: 20px 60px;
-	}
-	.overlay#quick-guide {
-		height: 100%;
-		position: fixed;
-		width: 100%;
-	}
-	.overlay#quick-guide .quick-guide {
-		background: none repeat scroll 0 0 rgba(255, 255, 255, 0.9);
-		border-radius: 4px;
-		left: 50%;
-		margin: -90px auto auto -250px;
-		padding: 10px 20px 20px;
-		position: fixed;
-		top: 50%;
-		width: 500px;
-		box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
-	}
-
-	/* Keys */
-	.key {
-		font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
-		font-size: 14px;
-		font-weight: bold;
-		
-		border-radius: 3px;
-		border: 1px solid rgba(0,0,0,0.2);
-		border-bottom: 2px solid rgba(0,0,0,0.2);
-		box-shadow: 0 0 6px rgba(0,0,0,0.07);
-		color: #777;
-		
-		width: 40px;
-		line-height: 40px;
-		display: inline-block;
-		text-align: center;
-		background: #46434a;
-		background: #fff;
-		margin-right: 10px;
-		vertical-align: baseline;
-	}
-	.key:hover {
-		background: rgb(250,250,250);
-	}
-	.key.enter {
-		padding-top: 20px;
-	}
-	.key.left,
-	.key.right,
-	.key.up,
-	.key.down {
-		padding-bottom: 2px;
-		line-height: 38px;
-	}
-	.key.esc {
-		font-size: 11px;
-	}
-
-	/* Help page */
-	.keys {
-		padding: 10px 0 0;
-		border-top: 1px solid rgba(0,0,0,0.1);
-		margin: 10px 0 0;
-	}
-	.keys li {
-		margin-bottom: 10px;
-		list-style: none;
+	.menu a:hover {
+		color: #e7e5e9;
 	}
 	</style>
 </head>
 <body><?php
-// Debugging
+	// Debugging
 	if(isset($debug)) { ?>
 	<div style="background: rgba(255,255,255,.8); margin: 40px; padding: 30px; position: fixed;">
 		<pre>
@@ -632,47 +482,14 @@ Next: <?php next_url($files, $file_id, $sub_file_id); ?>
 		</pre>
 	</div>
 	<?php }
-// END if debug
+	// END if debug
 	?>
+	
 	
 	<?php if (count($files) == 1): ?>
 		<div style="display: block; width: <?php print $page_min_width; ?>; height: <?php print $height; ?>px; margin: auto;"></div>
 	<?php else: ?>
-		<div class="overlay" id="help">
-			<div class="help">
-				<h1><?php print $name; ?></h1>
-				<h2>Keyboard shortcut</h2>
-				<ul class="keys">
-					<li><span class="key">?</span> Show this help page</li>
-				</ul>
-				<ul class="keys">
-					<li><span class="key left">&#x2190;</span><span class="key right">&#x2192;</span> Navigating pages</li>
-				</ul>
-				<ul class="keys">
-					<li><span class="key enter">&#x21a9;</span> Toggle menu view<li>
-				</ul>
-				<ul class="keys">
-					<li><span class="key up">&#x2191;</span> Move selection up in menu</li>
-					<li><span class="key down">&#x2193;</span> Move selection down in menu</li>
-					<li><span class="key enter">&#x21a9;</span> Go to selection<li>
-				</ul>
-				<ul class="keys">
-					<li><span class="key esc">esc</span> Close all overlays<li>
-				</ul>
-			</div>
-		</div>
-		<?php if ($file_id == 1 && $sub_file_id == 1) { ?>
-		<div class="overlay" id="quick-guide">
-			<div class="quick-guide">
-				<h2><?php print $name; ?></h2>
-				<ul class="keys">
-					<li><span class="key left">&#x2190;</span><span class="key right">&#x2192;</span> to navigating pages or press <span class="key enter" style="margin-left: 10px;">&#x21a9;</span> to toggle menu view.<li>
-				</ul>
-			</div>
-		</div>
-		<?php } ?>
 		<div class="menu">
-			<div class="info">Press <strong>?</strong> for help&nbsp;&mdash;&nbsp;<a href="https://github.com/vejnoe/index.php-for-webdesigns" target="_blank" title="GitHub">Beta v1.0, change log</a></div>
 			<ul class="navigation">
 				<?php
 				
@@ -708,10 +525,10 @@ Next: <?php next_url($files, $file_id, $sub_file_id); ?>
 					}
 				?>
 			</ul>
+			<!--<a href="<?php prev_url($files, $file_id, $sub_file_id); ?>">Back [<?php prev_url($files, $file_id, $sub_file_id); ?>]</a>-->
 		</div>
 
 		<a href="<?php next_url($files, $file_id, $sub_file_id); ?>" style="display: block; width: <?php print $page_min_width; ?>; height: <?php print $height; ?>px; margin: auto;"></a>
 	<?php endif; ?>
-	
 </body>
 </html>
