@@ -1,7 +1,7 @@
 <?php
 /*
 
-	Webdesign index.php - Beta v1.0
+	Webdesign index.php - Beta v1.1
 	https://github.com/vejnoe/index.php-for-webdesigns
 
 	|||||||||||||||   Vejnø
@@ -251,7 +251,7 @@ function prev_url($files, $file_id, $sub_file_id) {
 	<meta charset="utf-8">
 	<!--
 
-		Webdesign index.php - Beta v1.0
+		Webdesign index.php - Beta v1.1
 		https://github.com/vejnoe/index.php-for-webdesigns
 
 		|||||||||||||||   Vejnø
@@ -274,9 +274,7 @@ function prev_url($files, $file_id, $sub_file_id) {
 	?></title>
 
 	<script src="//code.jquery.com/jquery-1.10.2.min.js"></script>
-	<!--<script src="jquery-1.9.1.js"></script>-->
 	<script>
-		
 		function nowGoTo(destination) {
 			currentSelected = $('nav li.active').attr('id').substring(10,2);
 			currentSelected = parseInt(currentSelected);
@@ -823,7 +821,7 @@ Next: <?php next_url($files, $file_id, $sub_file_id); ?>
 		</div>
 		<?php } ?>
 		<nav>
-			<div class="info">Press <strong>?</strong> for help&nbsp;&mdash;&nbsp;<a href="https://github.com/vejnoe/index.php-for-webdesigns" target="_blank" title="GitHub">Beta v1.0, change log</a></div>
+			<div class="info">Press <strong>?</strong> for help&nbsp;&mdash;&nbsp;<a href="https://github.com/vejnoe/index.php-for-webdesigns" target="_blank" title="GitHub">Beta v1.1, change log</a></div>
 			<ul class="navigation">
 				<?php
 				
