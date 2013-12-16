@@ -1,5 +1,5 @@
 # Show your design files as a website
-This project is still in alpha so please come with your comment and idéers!
+Don't want to make a HTML page for every layout image file you have? Here is a easy way to fast and simple show your client the design you made them. Put all image files in a folder on your webserver + this index.php and your almost done. Then you get something like this http://www.vejnoe.dk/muubs
 
 ## How to use
 - Grap the [index.php](https://github.com/vejnoe/index.php-for-webdesigns/archive/master.zip) file and place it in the root of the folder you wish to use
