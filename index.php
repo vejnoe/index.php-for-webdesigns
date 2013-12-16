@@ -22,6 +22,8 @@ $active_color = "#87CEEB"; // Menu active link color (Default #87CEEB)
 $page_min_width = "960px"; // Page with.
 $margin_bottom = '0px'; // If you Photoshop workflow cuts the buttom margin of your layout.
 
+$color_menu_background = "#2F3238";
+
 $update = 1; // To force browser to update, plus the number every time you update your files.
 
 
@@ -146,7 +148,7 @@ $files = ListIn('.');
 
 
 // File ID - Set the current page and sub page.
-if (isset($_GET["p"])) { $page = $_GET["p"]; } else { $page = 1; }
+if (isset($_GET["p"])) { $page = $_GET["p"]; } else { $page = 1; };
 $file_id = (int) $page;
 
 if (isset($_GET["s"])) {
@@ -259,6 +261,9 @@ function prev_url($files, $file_id, $sub_file_id) {
 
 	-->
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<?php //<meta name="viewport" content="width=device-width,user-scalable=no" /> ?>
+	<meta name="robots" content="none">
+	<meta name="googlebot" content="noarchive">
 
 	<title><?php
 		print clean_title($file_name);
@@ -271,107 +276,188 @@ function prev_url($files, $file_id, $sub_file_id) {
 	<script src="//code.jquery.com/jquery-1.10.2.min.js"></script>
 	<!--<script src="jquery-1.9.1.js"></script>-->
 	<script>
+		
+		function nowGoTo(destination) {
+			currentSelected = $('nav li.active').attr('id').substring(10,2);
+			currentSelected = parseInt(currentSelected);
+			
+			if (destination == 'next') {
+				newSelection = currentSelected+1;	
+				if (!$('nav li').last().hasClass('active')) {
+					newSelection = 'nav li#nr' + newSelection.toString() + ' a';
+					window.location = $(newSelection).attr('href');
+				};
+			} else if (destination == 'prev') {
+				newSelection = currentSelected-1;
+				if (newSelection != 0) {
+					newSelection = 'nav li#nr' + newSelection.toString() + ' a';
+					window.location = $(newSelection).attr('href');
+				};
+			};
+		};
+		function toggle(thisThing) {
+			if (thisThing == 'help') {
+				if (!$('#help').hasClass('view')) {
+					$('#help').fadeIn().addClass('view');
+					$('nav').addClass('view');
+					$('#quick-help').fadeOut();
+				} else {
+					$('#help').fadeOut().removeClass('view');
+					$('nav').removeClass('view');
+					$('#quick-help').fadeOut();
+				}
+			}
+			
+		}
+
+
 		$("html").keydown(function(event) {
 			if (event.which == 13) {
 				// Enter
-				if (!$('.menu').hasClass('view')) {
-					$('.menu').addClass('view');
-				} else if ($('.menu li.focus').hasClass('active')) {
-					$('.menu').removeClass('view');
+				if (!$('nav').hasClass('view')) {
+					$('nav').addClass('view');
+				} else if ($('nav li.focus').hasClass('active')) {
+					$('nav').removeClass('view');
 					$('.overlay').fadeOut().removeClass('view');
 				} else {
-					window.location = $('.menu li.focus a').attr('href');
+					window.location = $('nav li.focus a').attr('href');
 				}
 			} else if (event.which == 38) {
 				// Up
 				// TODO: Make this one and the next a function...
-				if (!$('.menu').hasClass('view')) {
-					$('.menu').addClass('view');
+				if (!$('nav').hasClass('view')) {
+					$('nav').addClass('view');
 				};
 
-				currentSelected = $('.menu li.focus').attr('id').substring(10,2);
+				currentSelected = $('nav li.focus').attr('id').substring(10,2);
 				newSelection = currentSelected-1;
 				if (newSelection != 0) {
-					$('.menu li.focus').removeClass('focus');
-					newSelection = '.menu li#nr' + newSelection;
+					$('nav li.focus').removeClass('focus');
+					newSelection = 'nav li#nr' + newSelection;
 					$(newSelection).addClass('focus');
 				};
 
 				return false;
 			} else if (event.which == 40) {
 				// Down
-				if (!$('.menu').hasClass('view')) {
-					$('.menu').addClass('view');
+				if (!$('nav').hasClass('view')) {
+					$('nav').addClass('view');
 				};
 				
-				currentSelected = $('.menu li.focus').attr('id').substring(10,2);
+				currentSelected = $('nav li.focus').attr('id').substring(10,2);
 				currentSelected = parseInt(currentSelected);
 				newSelection = currentSelected+1;
 
-				if (!$('.menu li').last().hasClass('focus')) {
-					$('.menu li.focus').removeClass('focus');
-					newSelection = '.menu li#nr' + newSelection.toString();
+				if (!$('nav li').last().hasClass('focus')) {
+					$('nav li.focus').removeClass('focus');
+					newSelection = 'nav li#nr' + newSelection.toString();
 					$(newSelection).addClass('focus');
-					console.log(newSelection);
-					console.log($(newSelection));
+					//console.log(newSelection);
+					//console.log($(newSelection));
 				};
 
 				return false;
 				
 			} else if (event.which == 39) {
 				// Right
-				if (!$('.menu').hasClass('view')) {
-					currentSelected = $('.menu li.active').attr('id').substring(10,2);
-					currentSelected = parseInt(currentSelected);
-					newSelection = currentSelected+1;
-					
-					if (!$('.menu li').last().hasClass('active')) {
-						newSelection = '.menu li#nr' + newSelection.toString() + ' a';
-						window.location = $(newSelection).attr('href');
-					};
+				if (!$('nav').hasClass('view')) {
+					nowGoTo('next');
 				};
 			} else if (event.which == 37) {
 				// Left
-				if (!$('.menu').hasClass('view')) {
-					currentSelected = $('.menu li.active').attr('id').substring(10,2);
-					currentSelected = parseInt(currentSelected);
-					newSelection = currentSelected-1;
-					
-					if (newSelection != 0) {
-						newSelection = '.menu li#nr' + newSelection.toString() + ' a';
-						window.location = $(newSelection).attr('href');
-					};
+				if (!$('nav').hasClass('view')) {
+					nowGoTo('prev');
 				};
 			} else if (event.which == 171 || event.which == 191 || event.which == 187) {
 				// ?
 				if (!$('#help').hasClass('view')) {
 					$('#help').fadeIn().addClass('view');
-					$('.menu').addClass('view');
-					$('#quick-guide').fadeOut();
+					$('nav').addClass('view');
+					$('#quick-help').fadeOut();
 				} else {
 					$('#help').fadeOut().removeClass('view');
-					$('.menu').removeClass('view');
-					$('#quick-guide').fadeOut();
+					$('nav').removeClass('view');
+					$('#quick-help').fadeOut();
 				}
 			} else if (event.which == 27) {
 				// ESC
 				$('.overlay').fadeOut().removeClass('view');
-				$('.menu').removeClass('view');
+				$('nav').removeClass('view');
 			}
-			console.log(event.which);
+			//console.log(event.which);
 		});
 		
 
+
+
 		$(document).ready(function() {
-			$(".menu li.active").addClass('focus');
+			$("nav li.active").addClass('focus');
 			$('.overlay').click(function(){
 				$('.overlay').fadeOut().removeClass('view');
-				$('.menu').removeClass('view');
+				$('nav').removeClass('view');
 			});
 			setTimeout( function(){
-	 			$('#quick-guide').fadeOut();
+	 			$('#quick-help').fadeOut();
 			},5000);
+
+
+
+
+			$('a.prev, a.next').click(function () {
+			    var href = $(this).attr('href');
+
+			    // Redirect only after 500 milliseconds
+			    if (!$(this).data('timer')) {
+			       $(this).data('timer', setTimeout(function () {
+			          window.location = href;
+			       }, 300));
+			    }
+			    return false; // Prevent default action (redirecting)
+			});
+
+			$('a.prev, a.next').dblclick(function () {
+			    clearTimeout($(this).data('timer'));
+			    $(this).data('timer', null);
+
+			    if (!$('#help').hasClass('view')) {
+					$('#help').fadeIn().addClass('view');
+					$('nav').addClass('view');
+					$('#quick-help').fadeOut();
+				} else {
+					$('#help').fadeOut().removeClass('view');
+					$('nav').removeClass('view');
+					$('#quick-help').fadeOut();
+				}
+
+			    return false;
+			});
+
+			$('.open-nav').click(function() {
+				if (!$('#help').hasClass('view')) {
+					$('nav').addClass('view');
+					$('#quick-help').fadeOut();
+				} else {
+					$('#help').fadeOut().removeClass('view');
+					$('nav').removeClass('view');
+					$('#quick-help').fadeOut();
+				}
+
+				return false;
+			});
 		});
+
+		/*$(function() {			
+			//Enable swiping...
+			$(".slide").swipe( {
+				//Generic swipe handler for all directions
+				swipe:function(event, direction, distance, duration, fingerCount) {
+					console.log("You swiped " + direction );	
+				},
+				//Default is 75px, set to 0 for demo so any distance triggers swipe
+			   threshold:0
+			});
+		});*/
+
 	</script>
 
 	<link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,600' rel='stylesheet'>
@@ -383,8 +469,30 @@ function prev_url($files, $file_id, $sub_file_id) {
 		font-size: 16px;
 	}
 	body {
-		background: url('<?php print $file_path . '?v=' . $update; ?>') top center <?php print $background_color; ?> no-repeat;
 		margin: 0 0 <?php print $margin_bottom; ?>;
+		min-width: <?php print $page_min_width; ?>;
+		height: <?php print $height; ?>px;
+	}
+	.next,
+	.prev {
+		display: block;
+		width: 50%;
+		height: 100%;
+		position: fixed;
+		top: 0;
+		cursor: w-resize;
+		z-index: 1;
+	}
+	.next {
+		left: 50%;
+		cursor: e-resize;
+	}
+	figure {
+		background: url('<?php print $file_path . '?v=' . $update; ?>') top center <?php print $background_color; ?> no-repeat;
+		height: 100%;
+		margin: 0;
+		padding: 0;
+		z-index: 0;
 	}
 
 	/* Text */
@@ -406,92 +514,125 @@ function prev_url($files, $file_id, $sub_file_id) {
 	}
 	
 	/* Menu */
-	.menu {
-		background: #2F3238;
+	nav {
+		background: <?php print $color_menu_background; ?>;
 		box-shadow: inset rgba(39, 37, 41, .30) -5px 0 8px;
 		width: 300px;
 		height: 100%;
 		position: fixed;
 		overflow-x: hidden;
 		overflow-y: auto;
-		visibility: visible;
+		top: 0;
+		z-index: 20;
 		-webkit-transform: translate3d(-100%, 0, 0);
 		transform: translate3d(-100%, 0, 0);
 
 		-webkit-transition: all 0.5s;
 		transition: all 0.5s;
 	}
-	.menu.view {
-		visibility: visible;
+	nav.view {
 		-webkit-transform: translate3d(0, 0, 0);
 		transform: translate3d(0, 0, 0);
 	}
-	.menu ul {
+	nav ul {
 		font: normal 16px / normal 'Varela Round', Helvetica, Arial, sans-serif;
 		text-shadow: rgba(46, 43, 49, 0.35) 0 -1px 0;
 		padding: 0;
 		margin: 40px 20px;
 	}
-	.menu ul ul {
+	nav ul ul {
 		border-bottom: 1px solid #46434a;
 		margin: 0 0 20px;
 		padding: 0 0 10px;
 	}
-	.menu li {
+	nav li {
 		color: #fff; /*#a19fa4;*/
 		margin: 0 0 5px 0;
 		list-style: none;
 	}
-	.menu ul li.active a {
+	nav ul li.active a {
 		color: <?php print $active_color; ?>;
 	}
-	.menu ul li.folder li.active,
-	.menu ul li.folder li.focus.active {
+	nav ul li.folder li.active,
+	nav ul li.folder li.focus.active {
 		list-style: disc;
 		color: <?php print $active_color; ?>;
 	}
-	.menu ul li.folder li.focus.active {
+	nav ul li.folder li.focus.active {
 		text-shadow: 0 0 2px #fff;
 	}
-	.menu li.folder {
+	nav li.folder {
 		margin: 0 0 5px;
 		list-style: none;
 	}
-	.menu li.folder li {
+	nav li.folder li {
 		color: #B8B9BC; /*#a19fa4;*/
 		margin: 0 0 5px 20px;
 		list-style: circle;
 	}
-	.menu h3 {
+	nav h3 {
 		border-top: 1px solid #46434a;
 		margin: 20px 0 5px;
 		padding: 10px 0 0;
 	}
-	.menu li.folder+li.folder h3,
-	.menu li:first-child h3 {
+	nav li.folder+li.folder h3,
+	nav li:first-child h3 {
 		border-top: none;
 		margin: -10px 0 5px;
 		padding: 0 0 0;
 	}
-	.menu li a {
+	nav li a {
 		display: block;
 	}
-	.menu a {
+	nav a {
 		color: #B8B9BC; /*#a19fa4;*/
 		text-decoration: none;
 	}
-	.menu a:hover,
-	.menu ul li.folder li:hover,
-	.menu ul li.folder li.focus {
+	nav a:hover,
+	nav ul li.folder li:hover,
+	nav ul li.folder li.focus {
 		color: #fff; /*#e7e5e9;*/
 	}
-	.menu li.focus,
-	.menu li.focus a {
+	nav li.focus,
+	nav li.focus a {
 		color: #fff;
 	}
-	.menu li:last-child ul {
+	nav li:last-child ul {
 		border-bottom: none;
 	}
+	/* Menu - Open */
+	.open-nav,
+	.open-nav div {
+		display: block;
+		height: 100%;
+		width: 50px;
+		position: fixed;
+		z-index: 2;
+		top: 0;
+	}
+	.open-nav div {
+		box-shadow: inset rgba(39, 37, 41, .30) -5px 0 8px;
+		color: rgba(255,255,255,0.2);
+		text-decoration: none;
+		font-weight: 700;
+		font-size: 28px;
+		line-height: 4px;
+		text-align: center;
+		padding-top: 10px;
+
+		width: 26px;
+		background: <?php print $color_menu_background; ?>;
+		-webkit-transform: translate3d(-100%, 0, 0);
+		transform: translate3d(-100%, 0, 0);
+		
+		-webkit-transition: all 0.5s;
+		transition: all 0.5s;
+	}
+	.open-nav:hover div {
+		-webkit-transform: translate3d(0, 0, 0);
+		transform: translate3d(0, 0, 0);
+	}
+
 
 	/* Menu - Info */
 	.info {
@@ -511,6 +652,10 @@ function prev_url($files, $file_id, $sub_file_id) {
 	}
 
 	/* Overlays */
+	.overlay {
+		z-index: 10;
+		top: 0;
+	}
 	.overlay#help {
 		background-color: rgba(255, 255, 255, 0.9);
 		position: fixed;
@@ -524,12 +669,12 @@ function prev_url($files, $file_id, $sub_file_id) {
 		margin-left: 300px;
 		padding: 20px 60px;
 	}
-	.overlay#quick-guide {
+	.overlay#quick-help {
 		height: 100%;
 		position: fixed;
 		width: 100%;
 	}
-	.overlay#quick-guide .quick-guide {
+	.overlay#quick-help .quick-help {
 		background: none repeat scroll 0 0 rgba(255, 255, 255, 0.9);
 		border-radius: 4px;
 		left: 50%;
@@ -638,6 +783,12 @@ Next: <?php next_url($files, $file_id, $sub_file_id); ?>
 	<?php if (count($files) == 1): ?>
 		<div style="display: block; width: <?php print $page_min_width; ?>; height: <?php print $height; ?>px; margin: auto;"></div>
 	<?php else: ?>
+		<figure></figure>
+		<a href="#" class="open-nav"><div>≣</div></a>
+
+		<a href="<?php prev_url($files, $file_id, $sub_file_id); ?>" class="prev"></a>
+		<a href="<?php next_url($files, $file_id, $sub_file_id); ?>" class="next"></a>
+
 		<div class="overlay" id="help">
 			<div class="help">
 				<h1><?php print $name; ?></h1>
@@ -662,8 +813,8 @@ Next: <?php next_url($files, $file_id, $sub_file_id); ?>
 			</div>
 		</div>
 		<?php if ($file_id == 1 && $sub_file_id == 1) { ?>
-		<div class="overlay" id="quick-guide">
-			<div class="quick-guide">
+		<div class="overlay" id="quick-help">
+			<div class="quick-help">
 				<h2><?php print $name; ?></h2>
 				<ul class="keys">
 					<li><span class="key left">&#x2190;</span><span class="key right">&#x2192;</span> to navigating pages or press <span class="key enter" style="margin-left: 10px;">&#x21a9;</span> to toggle menu view.<li>
@@ -671,7 +822,7 @@ Next: <?php next_url($files, $file_id, $sub_file_id); ?>
 			</div>
 		</div>
 		<?php } ?>
-		<div class="menu">
+		<nav>
 			<div class="info">Press <strong>?</strong> for help&nbsp;&mdash;&nbsp;<a href="https://github.com/vejnoe/index.php-for-webdesigns" target="_blank" title="GitHub">Beta v1.0, change log</a></div>
 			<ul class="navigation">
 				<?php
@@ -708,9 +859,7 @@ Next: <?php next_url($files, $file_id, $sub_file_id); ?>
 					}
 				?>
 			</ul>
-		</div>
-
-		<a href="<?php next_url($files, $file_id, $sub_file_id); ?>" style="display: block; width: <?php print $page_min_width; ?>; height: <?php print $height; ?>px; margin: auto;"></a>
+		</nav>
 	<?php endif; ?>
 	
 </body>
