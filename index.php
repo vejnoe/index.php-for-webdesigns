@@ -1,13 +1,13 @@
 <?php
 /*
 
-	Webdesign index.php - Beta v1.1
+	Webdesign index.php - Beta v1.1.2
 	https://github.com/vejnoe/index.php-for-webdesigns
 
 	|||||||||||||||   Vejnø
 	|||   |||   |||   Andreas Vejnø Andersen
 	|||   |||   |||   www.vejnoe.dk
-	|||||||||||||||   © 2013
+	|||||||||||||||   © 2015
 
 */
 
@@ -15,16 +15,18 @@
 
 // Settings
 
+// Project settings
 $name = "Project Title"; // Surfix for page title (Project name).
+$update = 1; // To force browser to update, plus the number every time you update your files.
 
+// Page settings
 $background_color = "#FFF"; // Background color, if your layout don't have full with.
-$active_color = "#87CEEB"; // Menu active link color (Default #87CEEB)
 $page_min_width = "960px"; // Page with.
 $margin_bottom = '0px'; // If you Photoshop workflow cuts the buttom margin of your layout.
 
-$color_menu_background = "#2F3238";
-
-$update = 1; // To force browser to update, plus the number every time you update your files.
+// Menu settings
+$active_color = "#87CEEB"; // Menu active link color (Default #87CEEB)
+$color_menu_background = "#2F3238"; // Menu background color
 
 
 
@@ -146,9 +148,20 @@ function ListIn($dir, $prefix = '') {
 }
 $files = ListIn('.');
 
+// Testing if there are any image files in the project folder
+if (count($files) == 0) {
+	print '<h1>Cool you hava installed the index.php files!<br> Now go a head an put some images in the same folder...</h1>';
+	break; // TODO make this look pretty, and set an alert not break the page...
+}
 
 // File ID - Set the current page and sub page.
-if (isset($_GET["p"])) { $page = $_GET["p"]; } else { $page = 1; };
+if (count($files) == 1) {
+	$page = 0;
+} else if (isset($_GET["p"])) {
+	$page = $_GET["p"];
+} else {
+	$page = 1;
+}
 $file_id = (int) $page;
 
 if (isset($_GET["s"])) {
@@ -272,7 +285,7 @@ function prev_url($files, $file_id, $sub_file_id) {
 		}
 		print ' — ' . $name;
 	?></title>
-
+	<?php if (count($files) > 1): ?>
 	<script src="//code.jquery.com/jquery-1.10.2.min.js"></script>
 	<script>
 		function nowGoTo(destination) {
@@ -459,6 +472,8 @@ function prev_url($files, $file_id, $sub_file_id) {
 	</script>
 
 	<link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,600' rel='stylesheet'>
+	<?php endif ?>
+
 	<style>
 	/* Layout */
 	html,body,span,p,ol,ul,li,a,em,h1,h2,h3,h4,h5,h6  {
@@ -762,7 +777,7 @@ Nummer? <?php print_r(is_numeric(substr($file_path,0,1))); ?>
 
 gettype: <?php // print gettype($files[0]); ?>
 
-Next: <?php next_url($files, $file_id, $sub_file_id); ?>
+Next: <?php // next_url($files, $file_id, $sub_file_id); // TODO making error on debug if only one file ?>
 
 <?php if (gettype($files[$file_id]) == 'array') {
 	print 'Dette er et array()';
@@ -779,7 +794,7 @@ Next: <?php next_url($files, $file_id, $sub_file_id); ?>
 	?>
 	
 	<?php if (count($files) == 1): ?>
-		<div style="display: block; width: <?php print $page_min_width; ?>; height: <?php print $height; ?>px; margin: auto;"></div>
+		<figure></figure>
 	<?php else: ?>
 		<figure></figure>
 		<a href="#" class="open-nav"><div>≣</div></a>
