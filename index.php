@@ -95,6 +95,10 @@ function clean_title ($title) {
 		$title = substr ($title, 0, -3);
 	}
 
+	// Strip css settings
+	$title = explode('$', $title);
+	$title = $title[0];
+
 	$title_striped = $title;
 	// Stripping start caractors
 	while(is_numeric (substr ($title_striped,0,1)) || substr ($title_striped,0,1) == '_' || substr ($title_striped,0,1) == '-' || substr ($title_striped,0,1) == ' ' || substr ($title_striped,0,1) == '.') {
@@ -117,6 +121,23 @@ function get_title ($url) {
 	} else {
 		return clean_title($url[0]);
 	}
+}
+function get_file_name ($url) {
+	$url = explode('/', $url);
+	if (isset($url[1])) {
+		return $url[1];
+	} else {
+		return $url[0];
+	}
+}
+function get_css_settings ($file_name) {
+	// TODO Make a array with css from file or folder name
+	/*$url = explode('/', $url);
+	if (isset($url[1])) {
+		return $url[1];
+	} else {
+		return $url[0];
+	}*/
 }
 
 
@@ -296,14 +317,15 @@ if (!isset($files[$file_id])) {
 }
 
 
-// File path
+// Current file info
 $file_path = $files[$file_id];
-
-
-
-// Getting file info.
+$file_title = get_title($files[$file_id]);
+$file_name = get_file_name($files[$file_id]);
 $file_details = getimagesize($file_path);
 list($file_width, $file_height, $file_type, $file_attr) = $file_details;
+// TOTO Getting CSS settings
+$file_css_settings = explode('$', $file_name);
+if (!isset($file_css_settings[1])) { $file_css_settings = false; }
 
 ?><!doctype html>
 <html>
@@ -314,7 +336,7 @@ list($file_width, $file_height, $file_type, $file_attr) = $file_details;
 	<meta name="robots" content="none">
 	<meta name="googlebot" content="noarchive">
 	<title><?php
-		print get_title($files[$file_id]);
+		print $file_title;
 		print ' — ' . $name;
 	?></title>
 	<?php if (count($files) > 1): ?>
@@ -767,7 +789,6 @@ list($file_width, $file_height, $file_type, $file_attr) = $file_details;
 	</style>
 </head>
 <body<?php if(strpos($files[$file_id], '@2x')) { print ' class="retina"'; } ?>><?php
-
 // Debugging
 	if(isset($debug)) { ?>
 	<div style="background: rgba(0,0,0,.8); margin: 40px; padding: 30px; position: absolute;">
