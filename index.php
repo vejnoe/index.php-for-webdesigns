@@ -1,6 +1,6 @@
 <?php $made_by =
 "<!--
-		Webdesign index.php – Beta v1.2 – https://github.com/vejnoe/index.php-for-webdesigns
+		Webdesign index.php – Beta v2 – https://github.com/vejnoe/index.php-for-webdesigns
 
 		|||||||||||||||   Vejnø - www.vejnoe.dk
 		|||   |||   |||   Andreas Vejnø Andersen
