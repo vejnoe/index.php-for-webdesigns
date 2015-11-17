@@ -82,7 +82,7 @@ if (isset($_GET ["debug"])) { $debug = $_GET["debug"]; }
  * Cleand titles - Strip sorting numbers and extensions
  */
 function clean_title ($title) {
-	// Slet endelsen...
+	// Strip extension
 	$title = pathinfo ($title);
 	$title = $title['filename'];
 
@@ -96,11 +96,11 @@ function clean_title ($title) {
 	}
 
 	$title_striped = $title;
-	// Så længe den starter med et nummer eller et tegn...
+	// Stripping start caractors
 	while(is_numeric (substr ($title_striped,0,1)) || substr ($title_striped,0,1) == '_' || substr ($title_striped,0,1) == '-' || substr ($title_striped,0,1) == ' ' || substr ($title_striped,0,1) == '.') {
 		$title_striped = substr ($title_striped,1);
 	}
-	// Hvis nu der kun var et nummer så går tilbage til bare at slette endelsen...
+	// If the file name only contaions numbers
 	if ($title_striped == '') {
 		$title = $title;
 	} else {
