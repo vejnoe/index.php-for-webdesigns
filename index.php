@@ -1,33 +1,26 @@
 <?php $made_by =
 "<!--
-		Webdesign index.php - Beta v1.2
-		https://github.com/vejnoe/index.php-for-webdesigns
+		Webdesign index.php – Beta v1.2 – https://github.com/vejnoe/index.php-for-webdesigns
 
-		|||||||||||||||   Vejnø
+		|||||||||||||||   Vejnø - www.vejnoe.dk
 		|||   |||   |||   Andreas Vejnø Andersen
-		|||   |||   |||   www.vejnoe.dk
 		|||||||||||||||   © 2015
 	-->
 ";
 
-
-
-// Settings
-
 // Project settings
 $name = "Project Title"; // Surfix for page title (Project name).
-$update = 1; // To force browser to update, plus the number every time you update your files.
-
-// Page settings
 $background_color = "#FFF"; // Background color, if your layout don't have full with.
 $page_min_width = "960px"; // Page with.
-$margin_bottom = '0px'; // If you Photoshop workflow cuts the buttom margin of your layout.
 
+
+
+// Ekstras styling
+$margin_bottom = '0px'; // If you Photoshop workflow cuts the buttom margin of your layout.
+$update = 1; // To force browser to update, plus the number every time you update your files.
 // Menu settings
 $active_color = "#87CEEB"; // Menu active link color (Default #87CEEB)
 $color_menu_background = "#2F3238"; // Menu background color
-
-
 
 
 
