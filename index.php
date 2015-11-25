@@ -511,6 +511,7 @@ if (!isset($file_css_settings[1])) { $file_css_settings = false; }
 			margin: 0 0 <?php print $margin_bottom; ?>;
 			min-width: <?php print $page_min_width; ?>;
 			height: <?php print $file_height; ?>px;
+			background-color: <?php print $background_color; ?>;
 		}
 		body.retina {
 			height: <?php print $file_height/2; ?>px;
@@ -530,7 +531,7 @@ if (!isset($file_css_settings[1])) { $file_css_settings = false; }
 			cursor: e-resize;
 		}
 		figure {
-			background: url('<?php print $file_path . '?v=' . $update; ?>') top center <?php print $background_color; ?> no-repeat;
+			background: url('<?php print $file_path . '?v=' . $update; ?>') top center no-repeat;
 			height: 100%;
 			margin: 0;
 			padding: 0;
