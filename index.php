@@ -11,7 +11,7 @@
 // Project settings
 $name = "Project Title"; // Surfix for page title (Project name).
 $background_color = "#FFF"; // Background color, if your layout don't have full with.
-$page_min_width = "960px"; // Page with.
+$page_min_width = "1000px"; // Page with.
 
 
 
@@ -867,7 +867,7 @@ gettype: <?php // print gettype($files[0]); ?>
 		</div>
 		<?php } ?>
 		<nav>
-			<div class="info">Press <strong>?</strong> for help&nbsp;&mdash;&nbsp;<a href="https://github.com/vejnoe/index.php-for-webdesigns" target="_blank" title="GitHub">Beta v1.2, change log</a></div>
+			<div class="info">Press <strong>?</strong> for help&nbsp;&mdash;&nbsp;<a href="https://github.com/vejnoe/index.php-for-webdesigns" target="_blank" title="GitHub">Beta v2, change log</a></div>
 			<ul class="navigation">
 				<?php
 				$i = 0;
