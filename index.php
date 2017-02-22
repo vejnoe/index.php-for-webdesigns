@@ -1,10 +1,10 @@
 <?php $made_by =
 "<!--
-		Webdesign index.php – Beta v2 – https://github.com/vejnoe/index.php-for-webdesigns
+		Webdesign index.php – Beta v2.0.1 – https://github.com/vejnoe/index.php-for-webdesigns
 
 		|||||||||||||||   Vejnø - www.vejnoe.dk
 		|||   |||   |||   Andreas Vejnø Andersen
-		|||||||||||||||   © 2015
+		|||||||||||||||   © 2017
 	-->
 ";
 
@@ -256,7 +256,7 @@ function next_url($files_slug, $file_id) {
 function prev_url($files_slug, $file_id) {
 	if (isset($_GET["q"]) && $file_id == 1) {
 		// If first page, clean up url
-		return '/';
+		return './';
 	} else if (isset($_GET["q"]) && $file_id != 0) {
 		return "?q=" . $files_slug[$file_id-1];
 	} else {
@@ -336,20 +336,15 @@ if (!isset($file_css_settings[1])) { $file_css_settings = false; }
 		<script src="//code.jquery.com/jquery-1.10.2.min.js"></script>
 		<script>
 			function nowGoTo(destination) {
-				currentSelected = $('nav li.active').attr('id').substring(10,2);
-				currentSelected = parseInt(currentSelected);
-
 				if (destination == 'next') {
-					newSelection = currentSelected+1;
-					if (!$('nav li').last().hasClass('active')) {
-						newSelection = 'nav li#nr' + newSelection.toString() + ' a';
-						window.location = $(newSelection).attr('href');
+					destinationURL = $('body > a.next').attr('href');
+					if (destinationURL != undefined) {
+						window.location = destinationURL;
 					};
 				} else if (destination == 'prev') {
-					newSelection = currentSelected-1;
-					if (newSelection != 0) {
-						newSelection = 'nav li#nr' + newSelection.toString() + ' a';
-						window.location = $(newSelection).attr('href');
+					destinationURL = $('body > a.prev').attr('href');
+					if (destinationURL != undefined) {
+						window.location = destinationURL;
 					};
 				};
 			};
@@ -867,7 +862,7 @@ gettype: <?php // print gettype($files[0]); ?>
 		</div>
 		<?php } ?>
 		<nav>
-			<div class="info">Press <strong>?</strong> for help&nbsp;&mdash;&nbsp;<a href="https://github.com/vejnoe/index.php-for-webdesigns" target="_blank" title="GitHub">Beta v2, change log</a></div>
+			<div class="info">Press <strong>?</strong> for help&nbsp;&mdash;&nbsp;<a href="https://github.com/vejnoe/index.php-for-webdesigns" target="_blank" title="GitHub">Beta v2.0.1, change log</a></div>
 			<ul class="navigation">
 				<?php
 				$i = 0;
